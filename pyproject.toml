@@ -1,0 +1,20 @@
+[project]
+name = "craftsman"
+version = "0.1.0"
+description = "A CLI coding agent powered by LangChain and LangGraph"
+readme = "README.md"
+authors = [
+    { name = "Bihan Banerjee", email = "banerjeebihan456@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "langchain-openai>=1.1.7",
+    "langgraph>=1.0.7",
+    "langgraph-checkpoint-sqlite>=3.0.3",
+    "rich>=14.3.1",
+    "typer>=0.21.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.8.13,<0.9.0"]
+build-backend = "uv_build"
