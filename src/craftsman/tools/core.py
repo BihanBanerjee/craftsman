@@ -177,4 +177,3 @@ def glob_files(pattern: str, path:str = ".") -> str:
 
 # Export core tools (web tools are added by agent builder for lazy loading)
 TOOLS = [read_file, write_file, edit_file, run_bash, grep, glob_files]
-
