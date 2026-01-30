@@ -27,4 +27,3 @@ __all__ = [
     "list_session_approvals",
     "DEFAULT_RULES",
 ]
-
