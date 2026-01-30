@@ -8,6 +8,10 @@ authors = [
 ]
 requires-python = ">=3.13"
 dependencies = [
+    "beautifulsoup4>=4.14.3",
+    "duckduckgo-search>=8.1.1",
+    "exa-py>=2.2.0",
+    "httpx>=0.28.1",
     "langchain-openai>=1.1.7",
     "langgraph>=1.0.7",
     "langgraph-checkpoint-sqlite>=3.0.3",
