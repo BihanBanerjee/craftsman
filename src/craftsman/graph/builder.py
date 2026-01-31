@@ -105,3 +105,8 @@ def list_available_agents() -> list[str]:
     """List available agent modes."""
     return list(AGENT_CONFIGS.keys())
 
+
+def build_advanced_agent():
+    """Build an advanced agent with 2 features.
+    
+    """
