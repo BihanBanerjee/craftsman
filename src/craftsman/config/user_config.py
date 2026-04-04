@@ -7,7 +7,14 @@ defaults that can be overridden by CLI arguments.
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
-import yaml
+
+# Try to import PyYAML, fall back gracefully
+try:
+    import yaml
+    HAS_YAML = True
+except ImportError:
+    HAS_YAML = False
+
 
 CONFIG_DIR = Path.home() / ".craftsman"
 CONFIG_FILE = CONFIG_DIR / "config.yaml"
@@ -30,6 +37,10 @@ class UserConfig:
     def load(cls) -> "UserConfig":
         """Load config from file, falling back to defaults."""
         if not CONFIG_FILE.exists():
+            return cls()
+        
+        if not HAS_YAML:
+            # No YAML library, use defaults
             return cls()
         
         try:
@@ -55,6 +66,8 @@ class UserConfig:
         Returns:
             True if saved successfully, False otherwise.
         """
+        if not HAS_YAML:
+            return False
         
         try:
             CONFIG_DIR.mkdir(parents=True, exist_ok=True)

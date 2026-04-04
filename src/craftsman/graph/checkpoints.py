@@ -58,7 +58,7 @@ def list_checkpoints(
             checkpoints.append(CheckpointInfo(
                 checkpoint_id=thread_ts,
                 thread_id=tid,
-                timestamp=_formmat_timestamp(thread_ts),
+                timestamp=_format_timestamp(thread_ts),
                 step=idx
             ))
         
@@ -106,7 +106,7 @@ def get_session_count(db_path: Path) -> dict[str, int]:
         return {}
     
 
-def _formmat_timestamp(thread_ts: str) -> str:
+def _format_timestamp(thread_ts: str) -> str:
     """Format a LangGraph thread_ts into human-readable format."""
     try:
         # LangGraph uses UUIDs or timestamps as thread_ts
@@ -172,7 +172,7 @@ def export_session(
             FROM checkpoints
             WHERE thread_id = ?
             ORDER BY thread_ts ASC
-            """, (thread_id))
+            """, (thread_id,))
         
         rows = cursor.fetchall()
         conn.close()
