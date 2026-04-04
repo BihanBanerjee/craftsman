@@ -89,8 +89,13 @@ export OPENROUTER_API_KEY="your-key-here"
 # Start with defaults (Claude Sonnet via OpenRouter, coder mode)
 uv run craftsman chat
 
-# Use a different model (opus, haiku, gpt4o, gpt4o-mini)
+# Use a different model
 uv run craftsman chat --model opus
+uv run craftsman chat --model gemini
+uv run craftsman chat --model deepseek
+
+# Or pass any full OpenRouter model ID directly
+uv run craftsman chat --model x-ai/grok-4
 
 # Enable advanced mode (permissions + hooks)
 uv run craftsman chat --advanced
@@ -177,7 +182,7 @@ hooks:
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `--model`, `-m` | `sonnet` | Model alias (sonnet, opus, haiku, gpt4o, gpt4o-mini) |
+| `--model`, `-m` | `sonnet` | Model alias or full OpenRouter ID (see Models section) |
 | `--session`, `-s` | `default` | Session ID for persistence |
 | `--agent`, `-a` | `coder` | Agent mode |
 | `--policy` | `ask` | Approval policy |
@@ -198,6 +203,27 @@ hooks:
 | `/approvals` | Show remembered approvals |
 | `/clear` | Clear approval memory |
 | `exit`, `quit` | End session |
+
+---
+
+## Models
+
+All models are accessed via [OpenRouter](https://openrouter.ai). Use a short alias or pass any full OpenRouter model ID directly.
+
+| Alias | Model | Context |
+|-------|-------|---------|
+| `sonnet` | anthropic/claude-sonnet-4.6 | 1M |
+| `opus` | anthropic/claude-opus-4.6 | 1M |
+| `haiku` | anthropic/claude-haiku-4.5 | 200k |
+| `gemini` | google/gemini-2.5-pro | 1M |
+| `flash` | google/gemini-2.5-flash | 1M |
+| `gpt4o` | openai/gpt-4o | 128k |
+| `gpt4o-mini` | openai/gpt-4o-mini | 128k |
+| `gpt5` | openai/gpt-5.4 | 1M |
+| `deepseek` | deepseek/deepseek-chat | 64k |
+| `mistral` | mistralai/devstral-small-2503 | 128k |
+
+Context limits are fetched live from the OpenRouter API at startup, so newly released models are automatically supported even without a code update.
 
 ---
 

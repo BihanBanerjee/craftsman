@@ -8,16 +8,28 @@ import os
 from langchain_openai import ChatOpenAI
 
 
-# Available models via OpenRouter
+# Available models via OpenRouter.
+# Users can also pass any full OpenRouter model ID directly (e.g. --model x-ai/grok-4).
 MODELS = {
-    # Anthropic Claude 4.5 series
-    "sonnet": "anthropic/claude-sonnet-4.5",
-    "opus": "anthropic/claude-opus-4.5",
-    "haiku": "anthropic/claude-haiku-4.5",
-    
+    # Anthropic Claude
+    "sonnet": "anthropic/claude-sonnet-4.6",
+    "opus": "anthropic/claude-opus-4.6",
+    "haiku": "anthropic/claude-haiku-4.5",  # Update when 4.6 haiku ships
+
+    # Google Gemini
+    "gemini": "google/gemini-2.5-pro",
+    "flash": "google/gemini-2.5-flash",
+
     # OpenAI
     "gpt4o": "openai/gpt-4o",
     "gpt4o-mini": "openai/gpt-4o-mini",
+    "gpt5": "openai/gpt-5.4",
+
+    # DeepSeek
+    "deepseek": "deepseek/deepseek-chat",
+
+    # Mistral (coding-focused)
+    "mistral": "mistralai/devstral-small-2503",
 }
 
 DEFAULT_MODEL = "sonnet"
