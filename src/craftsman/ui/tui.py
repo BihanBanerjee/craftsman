@@ -12,7 +12,6 @@ from typing import Any
 
 from rich.console import Console, Group
 from rich.theme import Theme
-from rich.rule import Rule
 from rich.text import Text
 from rich.panel import Panel
 from rich.table import Table
@@ -114,19 +113,37 @@ class TUI:
         session: str,
         policy: str,
         persistence: str,
+        cwd: str | None = None,
     ) -> None:
         """Print welcome banner."""
-        self.console.print(Panel(
-            Text.assemble(
+        lines = Text.assemble(
+            ("Craftsman", "highlight"),
+            f" · {agent_mode}\n\n",
+        )
+        if cwd:
+            lines = Text.assemble(
                 ("Craftsman", "highlight"),
-                f" ({agent_mode} mode)\n\n",
-                ("Session: ", "muted"), (session, "info"), "\n",
-                ("Policy: ", "muted"), (policy, "info"), "\n",
-                ("Persistence: ", "muted"), (persistence, "info"), "\n\n",
-                ("Type ", "muted"), ("/help", "highlight"), (" for commands or ", "muted"),
-                ("exit", "highlight"), (" to quit.", "muted"),
-            ),
-            title=Text("Welcome", style="highlight"),
+                f" · {agent_mode}\n\n",
+                ("  cwd:         ", "muted"), (cwd, "info"), "\n",
+                ("  session:     ", "muted"), (session, "info"), "\n",
+                ("  policy:      ", "muted"), (policy, "info"), "\n",
+                ("  persistence: ", "muted"), (persistence, "info"), "\n\n",
+                ("  /help ", "highlight"), ("for commands  ·  ", "muted"),
+                ("exit ", "highlight"), ("to quit", "muted"),
+            )
+        else:
+            lines = Text.assemble(
+                ("Craftsman", "highlight"),
+                f" · {agent_mode}\n\n",
+                ("  session:     ", "muted"), (session, "info"), "\n",
+                ("  policy:      ", "muted"), (policy, "info"), "\n",
+                ("  persistence: ", "muted"), (persistence, "info"), "\n\n",
+                ("  /help ", "highlight"), ("for commands  ·  ", "muted"),
+                ("exit ", "highlight"), ("to quit", "muted"),
+            )
+        self.console.print(Panel(
+            lines,
+            title=Text("craftsman", style="highlight"),
             title_align="left",
             border_style="border",
             box=box.ROUNDED,
@@ -141,7 +158,6 @@ class TUI:
     def begin_assistant(self) -> None:
         """Begin assistant response section."""
         self.console.print()
-        self.console.print(Rule(Text("Assistant", style="assistant")))
     
     def stream_text(self, text: str) -> None:
         """Stream text output (no newline)."""
