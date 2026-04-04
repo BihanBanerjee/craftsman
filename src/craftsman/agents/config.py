@@ -3,7 +3,10 @@
 Defines different agent modes with their tools and permissions.
 """
 
+import os
+import platform
 from dataclasses import dataclass, field
+from datetime import date
 from pathlib import Path
 from typing import Callable, Any
 
@@ -35,6 +38,48 @@ def load_prompt(agent_name: str) -> str:
     return prompt_file.read_text().strip()
 
 
+def build_dynamic_context(agent_name: str, cwd: str | None = None) -> str:
+    """Build the dynamic context block to prepend to any agent's system prompt.
+
+    Captures runtime environment info — working directory, OS, shell, and date —
+    so the LLM doesn't have to guess. Also injects a parallel tool call hint for
+    agents that issue multiple read operations.
+
+    Args:
+        agent_name: The agent being built ("coder", "researcher", "planner", "reviewer").
+        cwd: Working directory to report. Defaults to os.getcwd() if not supplied.
+
+    Returns:
+        A multi-line string containing the dynamic context block.
+    """
+    cwd = cwd or os.getcwd()
+    today = date.today().isoformat()
+    os_name = platform.system()  # e.g. "Darwin", "Linux", "Windows"
+    shell = os.environ.get("SHELL", os.environ.get("COMSPEC", "unknown"))
+
+    lines = [
+        "<dynamic_context>",
+        f"Working directory: {cwd}",
+        f"Operating System: {os_name}",
+    ]
+
+    # Reviewer does pure static analysis — shell is irrelevant noise for it
+    if agent_name != "reviewer":
+        lines.append(f"Shell: {shell}")
+
+    lines.append(f"Date: {today}")
+
+    # All agents except reviewer benefit from parallel reads
+    if agent_name != "reviewer":
+        lines.append(
+            "When reading multiple independent files, use parallel tool calls "
+            "to fetch them simultaneously rather than sequentially."
+        )
+
+    lines.append("</dynamic_context>")
+    return "\n".join(lines)
+
+
 @dataclass
 class AgentConfig:
     """Configuration for an agent mode.
@@ -55,6 +100,21 @@ class AgentConfig:
     mode: str = "primary"
     max_steps: int = 50 # Default step limit
     color: str = "blue" # Default color for UI
+
+    def with_dynamic_context(self, cwd: str | None = None) -> str:
+        """Return the final system prompt with dynamic context prepended.
+
+        The dynamic block is computed fresh at call time so that cwd, date,
+        and shell always reflect the actual runtime environment.
+
+        Args:
+            cwd: Optional working directory override. Defaults to os.getcwd().
+
+        Returns:
+            Complete system prompt string ready to pass as state_modifier.
+        """
+        context_block = build_dynamic_context(self.name, cwd)
+        return f"{context_block}\n\n{self.system_prompt}"
 
 
 CODER_PROMPT = load_prompt("coder")

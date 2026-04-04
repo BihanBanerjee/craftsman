@@ -1,0 +1,75 @@
+# Example Hooks Configuration
+# Copy this to ~/.craftsman/config.yaml to enable hooks
+
+# Hooks allow you to run custom scripts at trigger points during agent execution
+# Available triggers: before_agent, after_agent, before_tool, after_tool, on_error
+
+# Environment variables available to hooks:
+# - AI_AGENT_TRIGGER: The trigger type
+# - AI_AGENT_CWD: Working directory
+# - AI_AGENT_TOOL_NAME: Tool name (for tool triggers)
+# - AI_AGENT_TOOL_PARAMS: Tool parameters as JSON
+# - AI_AGENT_USER_MESSAGE: User's message
+# - AI_AGENT_RESPONSE: Agent's response
+# - AI_AGENT_ERROR: Error message (for error trigger)
+
+hooks:
+  # Example 1: Log all agent interactions
+  before_agent:
+    - echo "[$(date)] User message: $AI_AGENT_USER_MESSAGE" >> ~/.craftsman/agent.log
+  
+  after_agent:
+    - echo "[$(date)] Agent completed" >> ~/.craftsman/agent.log
+  
+  # Example 2: Log all tool calls
+  before_tool:
+    - echo "[$(date)] Tool: $AI_AGENT_TOOL_NAME | Params: $AI_AGENT_TOOL_PARAMS" >> ~/.craftsman/tools.log
+  
+  # Example 3: Auto-backup before file writes
+  after_tool:
+    - |
+      if [ "$AI_AGENT_TOOL_NAME" = "write_file" ]; then
+        FILE=$(echo $AI_AGENT_TOOL_PARAMS | jq -r '.file_path' 2>/dev/null)
+        if [ -f "$FILE" ]; then
+          BACKUP_DIR="$HOME/.craftsman/backups"
+          mkdir -p "$BACKUP_DIR"
+          cp "$FILE" "$BACKUP_DIR/$(basename $FILE).$(date +%s).bak"
+          echo "Backed up: $FILE"
+        fi
+      fi
+  
+  # Example 4: Send desktop notifications (macOS)
+  # on_error:
+  #   - osascript -e 'display notification "Agent encountered an error" with title "Craftsman"'
+  
+  # Example 5: Run tests after agent completes
+  # after_agent:
+  #   - npm test
+  #   - pytest
+
+# More examples:
+
+# Git auto-commit after file changes:
+# after_tool:
+#   - |
+#     if [ "$AI_AGENT_TOOL_NAME" = "write_file" ]; then
+#       git add .
+#       git commit -m "Auto-commit: Agent modified files" || true
+#     fi
+
+# Slack notification on completion:
+# after_agent:
+#   - |
+#     curl -X POST -H 'Content-type: application/json' \
+#       --data '{"text":"Agent task completed"}' \
+#       YOUR_SLACK_WEBHOOK_URL
+
+# Run linter after code changes:
+# after_tool:
+#   - |
+#     if [ "$AI_AGENT_TOOL_NAME" = "write_file" ]; then
+#       FILE=$(echo $AI_AGENT_TOOL_PARAMS | jq -r '.file_path')
+#       if [[ "$FILE" == *.py ]]; then
+#         ruff check "$FILE" || true
+#       fi
+#     fi
