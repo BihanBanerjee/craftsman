@@ -220,8 +220,6 @@ All models are accessed via [OpenRouter](https://openrouter.ai). Use a short ali
 | `gpt4o` | openai/gpt-4o | 128k |
 | `gpt4o-mini` | openai/gpt-4o-mini | 128k |
 | `gpt5` | openai/gpt-5.4 | 1M |
-| `deepseek` | deepseek/deepseek-chat | 64k |
-| `mistral` | mistralai/devstral-small-2503 | 128k |
 
 Context limits are fetched live from the OpenRouter API at startup, so newly released models are automatically supported even without a code update.
 

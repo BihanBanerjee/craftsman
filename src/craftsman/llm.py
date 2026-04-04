@@ -25,11 +25,6 @@ MODELS = {
     "gpt4o-mini": "openai/gpt-4o-mini",
     "gpt5": "openai/gpt-5.4",
 
-    # DeepSeek
-    "deepseek": "deepseek/deepseek-chat",
-
-    # Mistral (coding-focused)
-    "mistral": "mistralai/devstral-small-2503",
 }
 
 DEFAULT_MODEL = "sonnet"

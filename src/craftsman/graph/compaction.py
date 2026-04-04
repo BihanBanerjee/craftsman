@@ -34,13 +34,6 @@ MODEL_CONTEXT_LIMITS: dict[str, int] = {
     "openai/gpt-4o-mini": 128_000,
     "openai/gpt-5.4": 1_000_000,
 
-    # DeepSeek
-    "deepseek": 64_000,
-    "deepseek/deepseek-chat": 64_000,
-
-    # Mistral
-    "mistral": 128_000,
-    "mistralai/devstral-small-2503": 128_000,
 }
 
 # Token limits
