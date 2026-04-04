@@ -71,7 +71,7 @@ def memory(action: str, key: str | None = None, value: str | None = None) -> str
         mem = _load_memory()
         mem["entries"][key] = value
         _save_memory(mem)
-        return f"✅ Stored memory: {key} = {value}"
+        return f"Stored: {key} = {value}"
     
     elif action == "get":
         if not key:
@@ -89,7 +89,7 @@ def memory(action: str, key: str | None = None, value: str | None = None) -> str
             return f"Memory not found: {key}"
         del mem["entries"][key]
         _save_memory(mem)
-        return f"✅ Deleted memory: {key}"
+        return f"Deleted: {key}"
     
     elif action == "list":
         mem = _load_memory()
@@ -106,7 +106,7 @@ def memory(action: str, key: str | None = None, value: str | None = None) -> str
         count = len(mem.get("entries", {}))
         mem["entries"] = {}
         _save_memory(mem)
-        return f"✅ Cleared {count} memory entries"
+        return f"Cleared {count} memory entries"
     
     else:
         return f"Error: Unknown action '{action}'. Use: set, get, delete, list, clear"

@@ -159,7 +159,7 @@ class TUI:
         
         # Build title
         title = Text.assemble(
-            ("⏺ ", "muted"),
+            ("> ", "muted"),
             (tool_name, "tool"),
             ("  ", "muted"),
             (f"#{call_id[:8]}", "muted"),

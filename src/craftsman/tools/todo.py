@@ -88,7 +88,7 @@ def todo(action: str, id: str | None = None, content: str | None = None) -> str:
         todos = _load_todos()
         items = todos.get("items", {})
         if not items:
-            return "📋 No pending todos"
+            return "No pending todos"
         lines = ["# Pending todos:"]
         for todo_id, item in items.items():
             lines.append(f"  [{todo_id}] {item['content']}")

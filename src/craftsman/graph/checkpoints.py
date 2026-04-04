@@ -123,7 +123,7 @@ def format_checkpoint_table(checkpoints: list[CheckpointInfo]) -> str:
     if not checkpoints:
         return "No checkpoints found for this session."
     
-    lines = ["📍 Session Checkpoints:", ""]
+    lines = ["Session Checkpoints:", ""]
     lines.append(f"{'#':<4} {'Checkpoint ID':<40} {'Thread ID':<15}")
     lines.append("-" * 60)
     
@@ -222,7 +222,7 @@ def export_session(
                             content = msg.get('content', '')
 
                             if role == 'human':
-                                lines.append("## 👤 User")
+                                lines.append("## User")
                                 lines.append("")
                                 lines.append(content)
                                 lines.append("")
@@ -231,7 +231,7 @@ def export_session(
                                 message_count += 1
                             
                             elif role == 'ai':
-                                lines.append("## 🤖 Assistant")
+                                lines.append("## Assistant")
                                 lines.append("")
                                 lines.append(content if content else "(tool call)")
                                 lines.append("")

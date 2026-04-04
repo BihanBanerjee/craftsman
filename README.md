@@ -7,58 +7,58 @@
 ![LangGraph](https://img.shields.io/badge/LangGraph-1.0+-purple.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-**A powerful CLI coding agent with multi-agent orchestration, permission system, and extensible hooks.**
+**A CLI coding agent with multi-agent orchestration, permission system, and extensible hooks.**
 
-[Features](#-features) •
-[Installation](#-installation) •
-[Quick Start](#-quick-start) •
-[Configuration](#%EF%B8%8F-configuration) •
-[Architecture](#%EF%B8%8F-architecture)
+[Features](#features) •
+[Installation](#installation) •
+[Quick Start](#quick-start) •
+[Configuration](#configuration) •
+[Architecture](#architecture)
 
 </div>
 
 ---
 
-## ✨ Features
+## Features
 
-### 🤖 Multi-Agent System
+### Multi-Agent System
 - **Coder** - Full-access development agent with all tools
 - **Researcher** - Read-only codebase exploration
 - **Planner** - Creates implementation plans (markdown only)
 - **Reviewer** - Code review specialist with detailed feedback
 
-### 🔐 Permission System
+### Permission System
 - Agent-specific permission rules (researcher can't write, planner limited to .md)
 - Configurable approval policies: `ask`, `auto`, `yolo`, `never`
 - Session memory for "remember this decision" feature
 - Interactive approval prompts with LangGraph interrupts
 
-### 🪝 Hooks System
+### Hooks System
 - Run custom scripts at 5 trigger points
 - Automate backups, testing, notifications, git commits
 - Configure via `~/.craftsman/config.yaml`
 
-### 🔧 10+ Built-in Tools
+### 10+ Built-in Tools
 | Core | Extended |
 |------|----------|
 | `read_file`, `write_file`, `edit_file` | `memory` (persistent key-value store) |
 | `run_bash`, `grep`, `glob_files` | `web_search`, `web_fetch` |
 | | `todo` (task tracking), `switch_agent` |
 
-### 💾 Persistence & Safety
+### Persistence & Safety
 - SQLite-backed session persistence
 - Checkpoint save/restore (`/checkpoints`, `/restore`)
 - Doom loop detection (prevents repetitive tool calls)
 - Context compaction (manages token limits)
 
-### 🎨 Rich Terminal UI
+### Rich Terminal UI
 - Syntax-highlighted code blocks
 - Color-coded tool execution panels
 - Streaming responses with real-time output
 
 ---
 
-## 📦 Installation
+## Installation
 
 ### Prerequisites
 - Python 3.13+
@@ -81,7 +81,7 @@ export OPENROUTER_API_KEY="your-key-here"
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Interactive Chat
 
@@ -116,7 +116,7 @@ uv run craftsman agents
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 ### Config File
 
@@ -163,7 +163,7 @@ hooks:
 
 ---
 
-## 📋 CLI Reference
+## CLI Reference
 
 ### Commands
 
@@ -201,7 +201,7 @@ hooks:
 
 ---
 
-## 🤖 Agents
+## Agents
 
 | Agent | Permissions | Use Case |
 |-------|-------------|----------|
@@ -216,18 +216,18 @@ The coder agent can delegate tasks to specialized subagents:
 
 ```
 "Please have the researcher explore the authentication module"
-→ Spawns researcher subagent with step limit
+-> Spawns researcher subagent with step limit
 
-"Create an implementation plan for adding OAuth support"  
-→ Spawns planner subagent
+"Create an implementation plan for adding OAuth support"
+-> Spawns planner subagent
 
 "Review the changes I made to auth.py"
-→ Spawns reviewer subagent with code review format
+-> Spawns reviewer subagent with code review format
 ```
 
 ---
 
-## 🔐 Approval Policies
+## Approval Policies
 
 | Policy | Behavior |
 |--------|----------|
@@ -238,7 +238,7 @@ The coder agent can delegate tasks to specialized subagents:
 
 ---
 
-## 🪝 Hooks System
+## Hooks System
 
 Hooks run custom scripts at trigger points:
 
@@ -276,35 +276,35 @@ hooks:
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
-┌────────────────────────────────────────────────────────────┐
-│                        CLI Layer                            │
-│   chat command │ run command │ slash commands (/config)    │
-└───────────────────────────┬────────────────────────────────┘
-                            │
-┌───────────────────────────▼────────────────────────────────┐
-│                     Agent Builder                           │
-│   build_agent() ──── simple mode                           │
-│   build_advanced_agent() ──── permissions + hooks + safety │
-└───────────────────────────┬────────────────────────────────┘
-                            │
-┌───────────────────────────▼────────────────────────────────┐
-│                  LangGraph StateGraph                       │
-│   ┌──────────┐    ┌─────────────┐    ┌──────────────┐     │
-│   │call_model│───▶│check_perms  │───▶│execute_tools │     │
-│   └──────────┘    └─────────────┘    └──────────────┘     │
-│        │                │                    │             │
-│        ▼                ▼                    ▼             │
-│   BEFORE_AGENT    BEFORE_TOOL          AFTER_TOOL         │
-│   AFTER_AGENT     (interrupt)          (hooks)            │
-└────────────────────────────────────────────────────────────┘
++------------------------------------------------------------+
+|                        CLI Layer                            |
+|   chat command | run command | slash commands (/config)    |
++---------------------------+--------------------------------+
+                            |
++---------------------------v--------------------------------+
+|                     Agent Builder                           |
+|   build_agent() ---- simple mode                           |
+|   build_advanced_agent() ---- permissions + hooks + safety |
++---------------------------+--------------------------------+
+                            |
++---------------------------v--------------------------------+
+|                  LangGraph StateGraph                       |
+|   +----------+    +-------------+    +--------------+     |
+|   |call_model|    |check_perms  |    |execute_tools |     |
+|   +----------+    +-------------+    +--------------+     |
+|        |                |                    |             |
+|        v                v                    v             |
+|   BEFORE_AGENT    BEFORE_TOOL          AFTER_TOOL         |
+|   AFTER_AGENT     (interrupt)          (hooks)            |
++------------------------------------------------------------+
 ```
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/craftsman/
@@ -339,7 +339,7 @@ src/craftsman/
 
 ---
 
-## 💾 Data Storage
+## Data Storage
 
 All data stored in `~/.craftsman/`:
 
@@ -352,7 +352,7 @@ All data stored in `~/.craftsman/`:
 
 ---
 
-## 🧪 Development
+## Development
 
 ```bash
 # Install dev dependencies
@@ -370,7 +370,7 @@ uv run ruff check src/
 
 ---
 
-## 📄 License
+## License
 
 MIT License - see [LICENSE](LICENSE) for details.
 

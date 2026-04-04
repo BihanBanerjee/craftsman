@@ -103,7 +103,7 @@ def _handle_slash_command(
                     break
         
         if target_id:
-            console.print(f"[green]✅ Restored to checkpoint: {target_id[:36]}...[/green]")
+            console.print(f"[green]Restored to checkpoint: {target_id[:36]}...[/green]")
             console.print("[dim]Note: Next message will resume from this checkpoint.[/dim]")
         else:
             console.print(f"[red]Checkpoint not found: {arg}[/red]")
@@ -137,7 +137,7 @@ def _handle_slash_command(
         )
         
         if success:
-            console.print(f"[green]✅ Session exported to: {result}[/green]")
+            console.print(f"[green]Session exported to: {result}[/green]")
         else:
             console.print(f"[red]{result}[/red]")
     
@@ -149,8 +149,8 @@ def _handle_slash_command(
         else:
             console.print("[bold]Remembered Approvals:[/bold]")
             for key, action in approvals.items():
-                icon = "✅" if action == PermissionAction.ALLOW else "❌"
-                console.print(f"  {icon} {key} → {action.value}")
+                icon = "allow" if action == PermissionAction.ALLOW else "deny"
+                console.print(f"  [{icon}] {key}: {action.value}")
     
     elif cmd == "/clear":
         clear_session_approvals()
@@ -262,7 +262,7 @@ def chat(
         if hooks_list:
             hook_config = HookSystemConfig(enabled=True, hooks=hooks_list)
             hook_system = HookSystem(hook_config)
-            console.print(f"[dim]✓ Loaded {len(hooks_list)} hook(s)[/dim]")
+            console.print(f"[dim]Loaded {len(hooks_list)} hook(s)[/dim]")
     
     # Choose agent builder based on --advanced flag
     if advanced:
