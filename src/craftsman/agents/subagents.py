@@ -19,14 +19,14 @@ from craftsman.agents.config import get_agent_config
 _subagent_cache: dict[str, Any] = {}
 
 
-def _get_or_create_subagent(agent_name: str, model):
+def _get_or_create_subagent(agent_name: str, model, cwd: str | None = None):
     """Get or create a subagent instance."""
     if agent_name not in _subagent_cache:
         config = get_agent_config(agent_name)
         subagent = create_react_agent(
             model,
             config.tools,
-            state_modifier=config.system_prompt,
+            state_modifier=config.with_dynamic_context(cwd),
             checkpointer=MemorySaver(),  # In-memory for subagents
         )
         _subagent_cache[agent_name] = (subagent, config.max_steps)
@@ -47,27 +47,28 @@ class DelegateToPlannerInput(BaseModel):
     )
 
 
-def create_subagent_tools(model):
+def create_subagent_tools(model, cwd: str | None = None):
     """Create tools for delegating to subagents.
-    
+
     Args:
         model: The LLM model to use for subagents
-    
+        cwd: Working directory to pass to subagent prompts
+
     Returns:
         List of delegation tools
     """
-    
+
     @tool(args_schema=DelegateToResearcherInput)
     def delegate_to_researcher(question: str) -> str:
         """Delegate a research task to the researcher agent.
-        
+
         The researcher agent can READ files, search with grep, and find files.
         It CANNOT write or edit files. Use this for:
         - Exploring unfamiliar codebases
         - Finding specific implementations
         - Understanding how something works
         """
-        subagent, max_steps = _get_or_create_subagent("researcher", model)
+        subagent, max_steps = _get_or_create_subagent("researcher", model, cwd)
         
         # Run with step limit using recursion_limit
         result = subagent.invoke(
@@ -92,7 +93,7 @@ def create_subagent_tools(model):
         - Breaking down complex tasks
         - Documenting approach before coding
         """
-        subagent, max_steps = _get_or_create_subagent("planner", model)
+        subagent, max_steps = _get_or_create_subagent("planner", model, cwd)
         
         result = subagent.invoke(
             {"messages": [HumanMessage(content=f"Create an implementation plan for: {task}")]},
@@ -118,7 +119,7 @@ def create_subagent_tools(model):
         Args:
             code_or_file: Either a file path to review, or describe what to review
         """
-        subagent, max_steps = _get_or_create_subagent("reviewer", model)
+        subagent, max_steps = _get_or_create_subagent("reviewer", model, cwd)
         
         prompt = f"""Please review the following code/file and provide feedback:
 
