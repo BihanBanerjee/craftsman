@@ -97,9 +97,6 @@ uv run craftsman chat --model deepseek
 # Or pass any full OpenRouter model ID directly
 uv run craftsman chat --model x-ai/grok-4
 
-# Enable advanced mode (permissions + hooks)
-uv run craftsman chat --advanced
-
 # Full trust mode (no permission prompts)
 uv run craftsman chat --advanced --policy yolo
 
@@ -186,7 +183,7 @@ hooks:
 | `--session`, `-s` | `default` | Session ID for persistence |
 | `--agent`, `-a` | `coder` | Agent mode |
 | `--policy` | `ask` | Approval policy |
-| `--advanced` | `false` | Enable permissions & hooks |
+| `--advanced/--no-advanced` | `true` | Full agent (permissions, hooks, doom loop). Use --no-advanced for simple mode |
 | `--no-persist` | `false` | Disable session persistence |
 
 ### Slash Commands

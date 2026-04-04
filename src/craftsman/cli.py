@@ -209,7 +209,7 @@ def chat(
     session: str = typer.Option("default", "--session", "-s", help="Session ID for conversation persistence"),
     agent: str = typer.Option("coder", "--agent", "-a", help="Agent mode (coder/researcher/planner)"),
     no_persist: bool = typer.Option(False, "--no-persist", help="Disable session persistence"),
-    advanced: bool = typer.Option(False, "--advanced", help="Use advanced agent with permissions & doom loop detection"),
+    advanced: bool = typer.Option(True, "--advanced/--no-advanced", help="Use full agent (permissions, doom loop, hooks). Default: on"),
     policy: str = typer.Option("ask", "--policy", help="Approval policy: ask, auto, yolo, never"),
 ):
     """Start an interactive chat session with the coding agent."""
@@ -231,7 +231,7 @@ def chat(
         console.print(f"[red]Error: Unknown agent '{agent}'. Available: {', '.join(available_agents)}[/red]")
         raise typer.Exit(1)
     
-    mode_label = f"{agent} mode" + (" [advanced]" if advanced else "")
+    mode_label = f"{agent} mode"
     policy_label = policy if advanced else "n/a"
     
     # Use rich TUI for welcome
@@ -264,7 +264,9 @@ def chat(
             hook_system = HookSystem(hook_config)
             console.print(f"[dim]Loaded {len(hooks_list)} hook(s)[/dim]")
     
-    # Choose agent builder based on --advanced flag
+    # Build agent — always uses the full advanced graph.
+    # Pass --no-advanced to fall back to the simple create_react_agent
+    # (no permissions, no doom loop, no hooks).
     if advanced:
         agent_graph = build_advanced_agent(
             agent_name=agent,

@@ -26,7 +26,7 @@ class UserConfig:
     model: str | None = None
     agent: str = "coder"
     policy: str = "ask"
-    advanced: bool = False
+    advanced: bool = True
     session: str = "default"
     no_persist: bool = False
 
@@ -51,7 +51,7 @@ class UserConfig:
                 model=data.get("model"),
                 agent=data.get("agent", "coder"),
                 policy=data.get("policy", "ask"),
-                advanced=data.get("advanced", False),
+                advanced=data.get("advanced", True),
                 session=data.get("session", "default"),
                 no_persist=data.get("no_persist", False),
                 hooks=data.get("hooks", {}),
