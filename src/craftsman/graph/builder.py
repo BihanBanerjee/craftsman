@@ -114,6 +114,7 @@ def build_advanced_agent(
     approval_policy: str = "ask",
     hook_system = None,
     cwd: str | None = None,
+    session_id: str = "default",
 ):
     """Build an advanced agent with Phase 2 features.
 
@@ -146,4 +147,6 @@ def build_advanced_agent(
         approval_policy=approval_policy,
         hook_system=hook_system,
         cwd=cwd,
+        session_id=session_id,
+        in_memory=in_memory,
     )

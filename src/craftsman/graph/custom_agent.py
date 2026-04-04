@@ -47,6 +47,8 @@ def build_custom_agent(
     approval_policy: str = "ask",
     hook_system = None,
     cwd: str | None = None,
+    session_id: str = "default",
+    in_memory: bool = False,
 ):
     """Build a custom agent graph with all Phase 2 features.
 
@@ -68,7 +70,12 @@ def build_custom_agent(
     if agent_name == "coder":
         # Add subagent delegation tools
         from craftsman.agents.subagents import create_subagent_tools
-        subagent_tools = create_subagent_tools(model, cwd=cwd)
+        subagent_tools = create_subagent_tools(
+            model,
+            cwd=cwd,
+            session_id=session_id,
+            in_memory=in_memory,
+        )
         tools.extend(subagent_tools)
         
         # Add switch_agent tool

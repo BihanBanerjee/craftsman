@@ -272,6 +272,7 @@ def chat(
             in_memory=no_persist,
             approval_policy=policy,
             hook_system=hook_system,
+            session_id=session,
         )
     else:
         agent_graph = build_agent(
